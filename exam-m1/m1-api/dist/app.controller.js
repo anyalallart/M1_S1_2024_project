@@ -20,7 +20,8 @@ let AppController = class AppController {
         this.appService = appService;
     }
     async greetMe(name) {
-        return `Hello ${name}`;
+        console.log(name);
+        return `Bonjour ${name}`;
     }
     async getHello() {
         return this.appService.getHello();

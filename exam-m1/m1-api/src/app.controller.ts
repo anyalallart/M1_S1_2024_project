@@ -7,7 +7,7 @@ export class AppController {
 
   @Get('greet/:name')
   public async greetMe(@Param('name') name: string): Promise<string> {
-    return `Hello ${name}`;
+    return `Bonjour ${name}`;
   }
 
   @Get('hello')
