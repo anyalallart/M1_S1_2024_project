@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Book } from './entities/book.entity';
+import { Book } from '../entities/book.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateBookDto } from './book.dto';
+import { CreateBookDto } from '../DTO/book.dto';
 
 @Injectable()
 export class BookService {

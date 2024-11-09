@@ -1,25 +1,24 @@
 import { Controller, Get, Post, Body, Query } from '@nestjs/common';
-import { BookService } from './book.service';
-import { CreateBookDto } from './book.dto';
-import { Book } from './entities/book.entity';
+import { BookService } from '../../service/book.service';
+import { Book } from '../../entities/book.entity';
+import {CreateBookDto} from "../../DTO/book.dto";
 
 @Controller('books')
 export class BookController {
     constructor(private readonly bookService: BookService) {}
 
-    // Obtenir la liste des livres avec option de tri et de recherche
+    // Route pour obtenir la liste des livres avec option de recherche et de tri
     @Get()
     async getBooks(
-        @Query('search') search: string,
-        @Query('sortBy') sortBy: 'title' | 'date' | 'author',
+        @Query('search') search?: string,
+        @Query('sortBy') sortBy?: 'title' | 'date' | 'author',
     ): Promise<Book[]> {
         return this.bookService.findAll({ search, sortBy });
     }
 
-    //Création un nouveau livre
+    // Route pour ajouter un nouveau livre
     @Post()
     async createBook(@Body() createBookDto: CreateBookDto): Promise<Book> {
         return this.bookService.create(createBookDto);
     }
 }
-
