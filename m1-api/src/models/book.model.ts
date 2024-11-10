@@ -1,12 +1,12 @@
 import { BookId } from '../entities/book.entity'; //rajouter page auhthor
 import { ratingModel } from './Rating.model';
-
+import { Author, AuthorId } from '../entities/author.entity';
 
 
 export class BookModel {
     id: BookId;
     title: string;
     publicationDate: string;
-    author: string; //mettre author
+    author: AuthorId; //mettre author
     rating?: ratingModel[];
 }
