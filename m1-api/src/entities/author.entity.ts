@@ -1,18 +1,22 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Book } from './book.entity'; // Adjust the import path as necessary
 
-export type BookId = string & { __brand: 'Book' }; // branding spécial pour éviter les erreurs de type
+export type AuthorId = string & { __brand: 'Author' }; // branding spécial pour éviter les erreurs de type
 
 @Entity()
-export class author {
+export class Author {
     @PrimaryGeneratedColumn('uuid')
-    id: BookId;
+    id: AuthorId;
 
     @Column()
-    title: string;
+    name: string;
 
-    @Column()
-    publicationDate: string;
+    @Column({ nullable: true })
+    birthDate: Date;
 
-    @Column()
-    author: string;
+    @Column({ nullable: true })
+    deathDate: Date;
+
+    @OneToMany(() => Book, book => book.author)
+    books: Book[];
 }
