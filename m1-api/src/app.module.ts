@@ -1,11 +1,23 @@
+//rajouter AuthorModule et Author
+
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { DatabaseModule } from './modules/database/database.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ControllerModule } from './controllers/controller.module';
+import { Book } from './entities/book.entity';
+
+
 
 @Module({
-  imports: [DatabaseModule],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'sqlite',
+      database: 'db',
+      entities: [Book], //rajouter Author,
+      synchronize: true,
+    }),
+    ControllerModule,
+  ],
 })
 export class AppModule {}
+
+
