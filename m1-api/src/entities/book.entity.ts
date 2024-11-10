@@ -15,4 +15,7 @@ export class Book {
 
     @Column()
     author: string;
+
+    @Column('float')
+    price: number;
 }
