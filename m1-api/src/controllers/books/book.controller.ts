@@ -3,7 +3,7 @@ import { BookService } from '../../service/book.service';
 import { Book } from '../../entities/book.entity';
 import {CreateBookDto} from "../../DTO/book.dto";
 
-@Controller('books')
+@Controller('api/books')
 export class BookController {
     constructor(private readonly bookService: BookService) {}
 
