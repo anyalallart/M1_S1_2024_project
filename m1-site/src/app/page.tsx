@@ -6,15 +6,15 @@ import AuthorOfDay from '../components/AuthorOfDay';
 export default function HomePage() {
     // En attendant de récupérer les données de l'API
   const books = [
-    { id: '1', title: 'Le Petit Prince', author: 'Antoine de Saint-Exupéry', image: '/images/le-petit-prince.jpg', rating: 4.7 },
-    { id: '2', title: 'Les Misérables', author: 'Victor Hugo', image: '/images/les-miserables.jpg', rating: 4.8 },
-    { id: '3', title: '1984', author: 'George Orwell', image: '/images/1984.jpg', rating: 4.6 },
+    { id: '1', title: 'Le Petit Prince', author: 'Antoine de Saint-Exupéry', image: 'https://via.placeholder.com/150', rating: 4.7 },
+    { id: '2', title: 'Les Misérables', author: 'Victor Hugo', image: 'https://via.placeholder.com/150', rating: 4.8 },
+    { id: '3', title: '1984', author: 'George Orwell', image: 'https://via.placeholder.com/150', rating: 4.6 },
   ];
   
     const authors = [
-      { id: '1', firstName: 'Victor', lastName: 'Hugo', image: '/images/victor-hugo.jpg' },
-      { id: '2', firstName: 'Antoine', lastName: 'de Saint-Exupéry', image: '/images/antoine.jpg' },
-      { id: '3', firstName: 'George', lastName: 'Orwell', image: '/images/george-orwell.jpg' },
+      { id: '1', firstName: 'Victor', lastName: 'Hugo', image: 'https://via.placeholder.com/150' },
+      { id: '2', firstName: 'Antoine', lastName: 'de Saint-Exupéry', image: 'https://via.placeholder.com/150' },
+      { id: '3', firstName: 'George', lastName: 'Orwell', image: 'https://via.placeholder.com/150' },
     ];
 
   return (
