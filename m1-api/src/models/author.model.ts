@@ -1,11 +1,8 @@
-import { BookId } from '../entities/book.entity'; //rajouter page auhthor
-import {  AuthorId } from '../entities/author.entity';
-
 
 export class AuthorModel {
-    id: AuthorId;
+    id: string;
     name: string;
     BirthDate: string;
     DeathDate: string;
-    books: BookId[];   
+    books: string[];   
 }

@@ -16,7 +16,7 @@ export class AuthorService {
                       sortBy,
                   }: {
         search?: string;
-        sortBy?: 'name' | 'birthDate' | 'deathDate';
+        sortBy?: 'name' | 'birthDate' | 'deathDate' | 'books';
     }): Promise<Author[]> {
         const query = this.authorRepository.createQueryBuilder('author');
 
@@ -32,7 +32,40 @@ export class AuthorService {
     }
 
     async create(createAuthorDto: CreateAuthorDto): Promise<Author> {
-        const author = this.authorRepository.create(createAuthorDto);
+        const author = this.authorRepository.create({
+            ...createAuthorDto,
+            books: createAuthorDto.books || [],
+        });
+        return this.authorRepository.save(author);
+    }
+
+    async AddNewBookToAuthor(id: string, bookId: string): Promise<Author> {
+        console.log(`Searching for author with id: ${id}`);
+        const author = await this.authorRepository.findOneBy({ id });
+        if (!author) {
+            console.error(`Author with id ${id} not found`);
+            throw new Error('Author not found');
+        }
+        if (!Array.isArray(author.books)) {
+            author.books = [];
+        }
+        author.books.push(bookId);
+        return this.authorRepository.save(author);
+    }
+
+    async remove(id: string): Promise<void> {
+        await this.authorRepository.delete(id);
+    }
+
+    async RemoveBookFromAuthor(id: string, bookId: string): Promise<Author> {
+        const author = await this.authorRepository.findOneBy({ id });
+        if (!author) {
+            throw new Error('Author not found');
+        }
+        if (!Array.isArray(author.books)) {
+            author.books = [];
+        }
+        author.books = author.books.filter((b) => b !== bookId);
         return this.authorRepository.save(author);
     }
 }
