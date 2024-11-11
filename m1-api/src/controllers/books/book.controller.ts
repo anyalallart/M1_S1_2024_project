@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Query, Param, Put, Delete } from '@nestjs/common';
 import { BookService } from '../../service/book.service';
 import { Book } from '../../entities/book.entity';
 import {CreateBookDto} from "../../DTO/book.dto";
+import {BookId} from "../../entities/book.entity";
 
 @Controller('api/books')
 export class BookController {
@@ -21,4 +22,38 @@ export class BookController {
     async createBook(@Body() createBookDto: CreateBookDto): Promise<Book> {
         return this.bookService.create(createBookDto);
     }
+
+    // Récupérer un livre par son ID
+    @Get('/:id')
+    async getBook(@Param('id') id: BookId): Promise<Book> {
+        const book = await this.bookService.findOne(id);
+        if (!book) {
+          throw new Error('Livre non trouvé'); 
+        }
+        return book;
+    }
+
+    // Mettre à jour un livre
+    @Put(':id')
+    async updateBook(@Param('id') id: BookId, @Body() book: Book): Promise<Book> {
+        const updatedBook = await this.bookService.update(id, book);
+        if (!updatedBook) {
+          throw new Error('Livre non trouvé'); 
+        }
+        return updatedBook;
+    }
+
+    // Supprimer un livre
+    @Delete('/:id')
+    async deleteBook(@Param('id') id: BookId): Promise<void> {
+        const book = await this.bookService.findOne(id);
+        if (!book) {
+          throw new Error('Livre non trouvé'); 
+        }
+        await this.bookService.remove(id);
+    }
+
+    // Ajout commentaires
+    
+
 }

@@ -3,6 +3,7 @@ import { Book } from '../entities/book.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateBookDto } from '../DTO/book.dto';
+import { BookId } from '../entities/book.entity';
 
 @Injectable()
 export class BookService {
@@ -16,7 +17,7 @@ export class BookService {
                       sortBy,
                   }: {
         search?: string;
-        sortBy?: 'title' | 'date' | 'author';
+        sortBy?: 'title' | 'date' | 'author' | 'price';
     }): Promise<Book[]> {
         const query = this.bookRepository.createQueryBuilder('book');
 
@@ -34,5 +35,25 @@ export class BookService {
     async create(createBookDto: CreateBookDto): Promise<Book> {
         const book = this.bookRepository.create(createBookDto);
         return this.bookRepository.save(book);
+    }
+
+    // Récupérer un livre par son ID
+    async findOne(id: BookId): Promise<Book | null> {
+        return this.bookRepository.findOne({ 
+            where : { id },
+        });
+    }
+
+    // Mettre à jour un livre
+    async update(id: BookId, book: Book): Promise<Book> {
+        await this.bookRepository.update(id, book);
+        return this.bookRepository.findOne({
+            where : { id },
+        });
+    }
+
+    // Supprimer un livre
+    async remove(id: BookId): Promise<void> {
+        await this.bookRepository.delete(id);
     }
 }
