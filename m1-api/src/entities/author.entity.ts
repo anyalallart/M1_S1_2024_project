@@ -1,12 +1,11 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { Book } from './book.entity'; // Adjust the import path as necessary
+import { Book} from './book.entity'; // Adjust the import path as necessary
 
-export type AuthorId = string & { __brand: 'Author' }; // branding spécial pour éviter les erreurs de type
 
 @Entity()
 export class Author {
     @PrimaryGeneratedColumn('uuid')
-    id: AuthorId;
+    id: string;
 
     @Column()
     name: string;
@@ -17,6 +16,6 @@ export class Author {
     @Column({ nullable: true })
     deathDate: Date;
 
-    @OneToMany(() => Book, book => book.author)
-    books: Book[];
+    @Column("simple-array", { nullable: true })
+    books: string[];
 }
