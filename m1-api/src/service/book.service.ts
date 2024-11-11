@@ -20,16 +20,19 @@ export class BookService {
     }): Promise<Book[]> {
         const query = this.bookRepository.createQueryBuilder('book');
 
+        // Filtre de recherche
         if (search) {
             query.where('book.title LIKE :search', { search: `%${search}%` });
         }
 
+        // Tri selon le champ et l'ordre choisis
         if (sortBy) {
             query.orderBy(`book.${sortBy}`, 'ASC');
         }
 
         return query.getMany();
     }
+
 
     async create(createBookDto: CreateBookDto): Promise<Book> {
         const book = this.bookRepository.create(createBookDto);

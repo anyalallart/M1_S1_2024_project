@@ -11,7 +11,7 @@ export class BookController {
     @Get()
     async getBooks(
         @Query('search') search?: string,
-        @Query('sortBy') sortBy?: 'title' | 'date' | 'author',
+        @Query('sortBy') sortBy?: 'title' | 'date' | 'author' | 'price',
     ): Promise<Book[]> {
         return this.bookService.findAll({ search, sortBy });
     }
