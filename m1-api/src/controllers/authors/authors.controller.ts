@@ -36,6 +36,7 @@ export class AuthorController {
         const { id } = body;
         return this.authorService.remove(id);
     } 
+    /*
     //Récupérer les détails d'un auteur
     @Get('/:id')
 async getAuthor(@Param('id') id: string): Promise<Author> {
@@ -60,4 +61,5 @@ async deleteAuthor(@Param('id') id: string): Promise<void> {
 async createBook(@Body() createBookDto: CreateBookDto): Promise<Book> {
   return this.bookService.create(createBookDto);
     }
+  */
 }
