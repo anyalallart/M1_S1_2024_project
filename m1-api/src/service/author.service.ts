@@ -40,7 +40,6 @@ export class AuthorService {
     }
 
     async AddNewBookToAuthor(id: string, bookId: string): Promise<Author> {
-        console.log(`Searching for author with id: ${id}`);
         const author = await this.authorRepository.findOneBy({ id });
         if (!author) {
             console.error(`Author with id ${id} not found`);

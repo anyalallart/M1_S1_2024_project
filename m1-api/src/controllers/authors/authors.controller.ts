@@ -22,7 +22,6 @@ export class AuthorController {
     @Post() // Add new book to author
     async AddNewBookToAuthor(@Body() body: { id: string, book: string }): Promise<Author> {
         const { id, book } = body;
-        console.log(`Received id: ${id}, book: ${book}`);
         return this.authorService.AddNewBookToAuthor(id, book);
     }
 
