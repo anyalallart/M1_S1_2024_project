@@ -3,5 +3,6 @@ export class CreateAuthorDto {
     birthDate: Date;
     DeathDate: Date;
     books: string[];
+    imageUrl?: string;
 }
 
