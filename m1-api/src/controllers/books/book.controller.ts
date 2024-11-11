@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Query, Param, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Query, Param, Put, Delete, NotFoundException } from '@nestjs/common';
 import { BookService } from '../../service/book.service';
 import { Book } from '../../entities/book.entity';
 import {CreateBookDto} from "../../DTO/book.dto";
@@ -48,12 +48,12 @@ export class BookController {
     async deleteBook(@Param('id') id: BookId): Promise<void> {
         const book = await this.bookService.findOne(id);
         if (!book) {
-          throw new Error('Livre non trouvé'); 
+            throw new NotFoundException('Livre non trouvé'); 
         }
         await this.bookService.remove(id);
     }
 
     // Ajout commentaires
-    
+
 
 }
