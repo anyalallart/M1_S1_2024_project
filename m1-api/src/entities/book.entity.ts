@@ -1,11 +1,9 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-export type BookId = string & { __brand: 'Book' }; // branding spécial pour éviter les erreurs de type
-
 @Entity()
 export class Book {
     @PrimaryGeneratedColumn('uuid')
-    id: BookId;
+    id: string;
 
     @Column()
     title: string;
