@@ -19,21 +19,27 @@ const BooksPage = () => {
     const [filteredBooks, setFilteredBooks] = useState<Book[]>([]);
     const [showModal, setShowModal] = useState(false);
     const [newBook, setNewBook] = useState({ title: '', publicationDate: '', author: '' , price: 0});
-    const [sortOption, setSortOption] = useState(''); // État pour le critère de tri
+    const [sortBy, setSortBy] = useState('');
 
+    // Fonction pour récupérer les livres avec les paramètres de tri et de recherche
     const fetchBooks = async () => {
-        const response = await fetch('http://localhost:3001/api/books');
-        const data = await response.json();
-        setBooks(data);
-        setFilteredBooks(data); // Initialement, on affiche tous les livres
+        try {
+            const response = await axios.get(`http://localhost:3001/api/books`, {
+                params: {
+                    search: searchQuery,
+                    sortBy,
+                },
+            });
+            setBooks(response.data);
+            setFilteredBooks(response.data);
+        } catch (error) {
+            console.error('Erreur lors de la récupération des livres:', error);
+        }
     };
 
-
-    // Charger la liste des livres
     useEffect(() => {
-        fetchBooks()
-    }, []);
-
+        fetchBooks();
+    }, [searchQuery, sortBy]);
 
 
 
@@ -41,15 +47,9 @@ const BooksPage = () => {
         setSearchQuery(e.target.value);
     };
 
-    // Fonction pour exécuter la recherche lorsque l'on clique sur le bouton
-    const handleSearchClick = () => {
-        const lowerCaseQuery = searchQuery.toLowerCase();
-        const filtered = books.filter(book =>
-            book.title.toLowerCase().includes(lowerCaseQuery)
-        );
-        setFilteredBooks(filtered);
+    const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setSortBy(e.target.value);
     };
-
 
 
     // Afficher la modale pour ajouter un livre
@@ -90,23 +90,19 @@ const BooksPage = () => {
                     onChange={handleSearchChange}
                     className="w-full px-4 py-2 text-gray-700 focus:outline-none"
                 />
-                <button onClick={handleSearchClick}>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M11 4a7 7 0 017 7c0 1.657-.48 3.205-1.292 4.51l4.292 4.292-1.414 1.414-4.292-4.292A7 7 0 1111 4z"
-                        />
-                    </svg>
+            </div>
 
-                </button>
+            {/* Filtres de tri */}
+            <div className="flex gap-4 mt-4">
+                <label className="font-medium">Trier par :</label>
+                <select onChange={handleSortChange} value={sortBy} className="p-2 border border-gray-300 rounded-lg">
+                    <option value="">Aucun</option>
+                    <option value="title">Titre</option>
+                    <option value="publicationDate">Date de publication</option>
+                    <option value="author">Auteur</option>
+                    <option value="price">Prix</option>
+                </select>
+
             </div>
 
             {/* Bouton pour ajouter un nouveau livre */}
