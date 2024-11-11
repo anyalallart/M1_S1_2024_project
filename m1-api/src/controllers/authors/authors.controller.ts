@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Query } from '@nestjs/common';
+import { Controller, Get, Post,Put,Delete, Body, Query } from '@nestjs/common';
 import { Author } from '../../entities/author.entity';
 import { AuthorService } from '../../service/author.service';
 import { CreateAuthorDto } from 'src/DTO/author.dto';
@@ -15,11 +15,12 @@ export class AuthorController {
     ): Promise<Author[]> {
         return this.authorService.getAllAuthors({ search, sortBy });
     }
-    @Post()
+    @Put()
     async createauthor(@Body() createauthor: CreateAuthorDto): Promise<Author> {
         //affiche les données de createauthor
         console.log(createauthor.name);
         console.log('createauthor');
         return this.authorService.create(createauthor);
     }
+    
 }
