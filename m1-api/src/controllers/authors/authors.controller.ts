@@ -1,8 +1,15 @@
-import { Controller, Get, Post,Put, Delete, Patch, Body, Query } from '@nestjs/common';
-import { Author} from '../../entities/author.entity';
+import { Controller, Get, Post, Put, Patch, Delete, Body, Query, Param, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Express } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Author } from '../../entities/author.entity';
 import { AuthorService } from '../../service/author.service';
 import { CreateAuthorDto } from 'src/DTO/author.dto';
-import { create } from 'domain';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+import { Multer } from 'multer';
+
+type File = Express.Multer.File;
+
 
 @Controller('api/authors')
 export class AuthorController {
@@ -35,4 +42,18 @@ export class AuthorController {
         const { id } = body;
         return this.authorService.remove(id);
     } 
+    @Post(':id/upload') // Upload author image
+    @UseInterceptors(FileInterceptor('file', {
+        storage: diskStorage({
+            destination: './uploads',
+            filename: (req, file, cb) => {
+                const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+                cb(null, `${file.fieldname}-${uniqueSuffix}${extname(file.originalname)}`);
+            }
+        })
+    }))
+    async uploadAuthorImage(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Author> {
+        const imageUrl = `http://localhost:3001/uploads/${file.filename}`;
+        return this.authorService.updateAuthorImage(id, imageUrl);
+    }
 }

@@ -67,4 +67,12 @@ export class AuthorService {
         author.books = author.books.filter((b) => b !== bookId);
         return this.authorRepository.save(author);
     }
+    async updateAuthorImage(id: string, imageUrl: string): Promise<Author> {
+        const author = await this.authorRepository.findOneBy({ id });
+        if (!author) {
+            throw new Error('Author not found');
+        }
+        author.imageUrl = imageUrl;
+        return this.authorRepository.save(author);
+    }
 }
