@@ -68,6 +68,7 @@ export class AuthorService {
         author.books = author.books.filter((b) => b !== bookId);
         return this.authorRepository.save(author);
     }
+    /*
     //Récupérer les détails d'un auteur
     async findOne(id: string): Promise<Author | null> {
         return this.authorRepository.findOne(id);
@@ -86,4 +87,5 @@ export class AuthorService {
         const book = this.bookRepository.create(createBookDto);
         return this.bookRepository.save(book);
     }
+    */
 }
