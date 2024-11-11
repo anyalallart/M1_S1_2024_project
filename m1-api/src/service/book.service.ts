@@ -3,7 +3,6 @@ import { Book } from '../entities/book.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateBookDto } from '../DTO/book.dto';
-import { BookId } from '../entities/book.entity';
 
 @Injectable()
 export class BookService {
@@ -38,14 +37,14 @@ export class BookService {
     }
 
     // Récupérer un livre par son ID
-    async findOne(id: BookId): Promise<Book | null> {
+    async findOne(id: string): Promise<Book | null> {
         return this.bookRepository.findOne({ 
             where : { id },
         });
     }
 
     // Mettre à jour un livre
-    async update(id: BookId, book: Book): Promise<Book> {
+    async update(id: string, book: Book): Promise<Book> {
         await this.bookRepository.update(id, book);
         return this.bookRepository.findOne({
             where : { id },
@@ -53,7 +52,7 @@ export class BookService {
     }
 
     // Supprimer un livre
-    async remove(id: BookId): Promise<void> {
+    async remove(id: string): Promise<void> {
         await this.bookRepository.delete(id);
     }
 }
