@@ -16,6 +16,6 @@ export class Book {
     @Column()
     author: string;
 
-    @Column('float')
+    @Column('float', { default: 0 })
     price: number;
 }
