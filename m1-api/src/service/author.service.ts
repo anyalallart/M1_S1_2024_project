@@ -68,4 +68,22 @@ export class AuthorService {
         author.books = author.books.filter((b) => b !== bookId);
         return this.authorRepository.save(author);
     }
+    //Récupérer les détails d'un auteur
+    async findOne(id: string): Promise<Author | null> {
+        return this.authorRepository.findOne(id);
+    }
+    //Modifier les informations d'un auteur
+    async update(id: string, author: Author): Promise<Author> {
+        await this.authorRepository.update(id, author);
+        return this.authorRepository.findOne(id);
+    }
+    //Supprimer un auteur
+    async remove(id: string): Promise<void> {
+        await this.authorRepository.delete(id);
+    }
+    //Ajouter un livre à un auteur
+    async create(createBookDto: CreateBookDto): Promise<Book> {
+        const book = this.bookRepository.create(createBookDto);
+        return this.bookRepository.save(book);
+    }
 }

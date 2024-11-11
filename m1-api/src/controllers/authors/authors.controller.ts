@@ -36,4 +36,28 @@ export class AuthorController {
         const { id } = body;
         return this.authorService.remove(id);
     } 
+    //Récupérer les détails d'un auteur
+    @Get('/:id')
+async getAuthor(@Param('id') id: string): Promise<Author> {
+  const author = await this.authorService.findOne(id);
+  if (!author) {
+    throw new NotFoundException('Auteur non trouvé');
+  }
+  return author;
+    }
+    //Modifier les informations d'un auteur
+    @Put('/:id')
+async updateAuthor(@Param('id') id: string, @Body() author: Author): Promise<Author> {
+  return this.authorService.update(id, author);
+    }
+    //Supprimer un auteur
+    @Delete('/:id')
+async deleteAuthor(@Param('id') id: string): Promise<void> {
+  return this.authorService.remove(id);
+    }
+    //Ajouter un livre à un auteur
+    @Post()
+async createBook(@Body() createBookDto: CreateBookDto): Promise<Book> {
+  return this.bookService.create(createBookDto);
+    }
 }
