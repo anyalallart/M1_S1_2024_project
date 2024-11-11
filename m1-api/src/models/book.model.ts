@@ -8,5 +8,6 @@ export class BookModel {
     title: string;
     publicationDate: string;
     author: AuthorId; //mettre author
+    price: number;
     rating?: ratingModel[];
 }
