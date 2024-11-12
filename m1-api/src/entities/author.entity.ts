@@ -18,4 +18,8 @@ export class Author {
 
     @Column("simple-array", { nullable: true })
     books: string[];
+    
+    @Column({ nullable: true })
+    imageUrl: string; // Add this field to store the image URL
+
 }

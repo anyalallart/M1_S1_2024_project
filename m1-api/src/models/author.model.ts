@@ -5,4 +5,5 @@ export class AuthorModel {
     BirthDate: string;
     DeathDate: string;
     books: string[];   
+    imageUrl: string;
 }

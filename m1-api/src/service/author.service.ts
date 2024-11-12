@@ -40,7 +40,6 @@ export class AuthorService {
     }
 
     async AddNewBookToAuthor(id: string, bookId: string): Promise<Author> {
-        console.log(`Searching for author with id: ${id}`);
         const author = await this.authorRepository.findOneBy({ id });
         if (!author) {
             console.error(`Author with id ${id} not found`);
@@ -68,24 +67,12 @@ export class AuthorService {
         author.books = author.books.filter((b) => b !== bookId);
         return this.authorRepository.save(author);
     }
-    /*
-    //Récupérer les détails d'un auteur
-    async findOne(id: string): Promise<Author | null> {
-        return this.authorRepository.findOne(id);
+    async updateAuthorImage(id: string, imageUrl: string): Promise<Author> {
+        const author = await this.authorRepository.findOneBy({ id });
+        if (!author) {
+            throw new Error('Author not found');
+        }
+        author.imageUrl = imageUrl;
+        return this.authorRepository.save(author);
     }
-    //Modifier les informations d'un auteur
-    async update(id: string, author: Author): Promise<Author> {
-        await this.authorRepository.update(id, author);
-        return this.authorRepository.findOne(id);
-    }
-    //Supprimer un auteur
-    async remove(id: string): Promise<void> {
-        await this.authorRepository.delete(id);
-    }
-    //Ajouter un livre à un auteur
-    async create(createBookDto: CreateBookDto): Promise<Book> {
-        const book = this.bookRepository.create(createBookDto);
-        return this.bookRepository.save(book);
-    }
-    */
 }
