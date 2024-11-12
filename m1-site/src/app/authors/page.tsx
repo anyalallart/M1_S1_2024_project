@@ -2,14 +2,17 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import '../App.css';
+import AuthorOfTheDay from '../../components/AuthorOfDay'; // Importez le composant AuthorOfTheDay
 
 interface Author {
     id: number;
     name: string;
     birthDate: string;
-    deathDate?: string; // Optional property
+    deathDate: string;
     books: string[];
+    isAlive: boolean;
+    firstName?: string; 
+    lastName?: string;  
     imageUrl?: string;
 }
 
@@ -134,11 +137,15 @@ const AuthorsPage = () => {
             <ul className="flex flex-wrap justify-center gap-8">
                 {filteredAuthors.map(author => (
                     <li key={author.id} className="bg-white p-4 rounded-lg shadow-md w-full max-w-xs">
-                        <h2 className="text-xl font-semibold">{author.name}</h2>
+                        <AuthorOfTheDay
+                            id={author.id}
+                            firstName={author.firstName}
+                            lastName={author.lastName}
+                            image={author.imageUrl}
+                        />
                         <p>Date de naissance: {formatDate(author.birthDate)}</p>
                         {author.deathDate && <p>Date de décès: {formatDate(author.deathDate)}</p>}
                         <p>Livres: {author.books.join(', ')}</p>
-                        {author.imageUrl && <img src={author.imageUrl} alt={author.name} className="mt-2 w-full h-auto" />}
                     </li>
                 ))}
             </ul>

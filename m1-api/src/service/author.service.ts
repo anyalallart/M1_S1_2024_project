@@ -75,4 +75,11 @@ export class AuthorService {
         author.imageUrl = imageUrl;
         return this.authorRepository.save(author);
     }
+
+    async findOne(id: string): Promise<Author | null> {
+        return this.authorRepository.findOne({
+            where: { id },
+        });
+    }
+    
 }

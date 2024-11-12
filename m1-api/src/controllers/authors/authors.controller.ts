@@ -67,4 +67,13 @@ export class AuthorController {
         const imageUrl = `http://localhost:3001/uploads/${file.filename}`;
         return this.authorService.updateAuthorImage(id, imageUrl);
     }
+
+    @Get(':/id')
+    async getAuthor(@Param('id') id: string): Promise<Author> {
+        const author = await this.authorService.findOne(id);
+        if (!author) {
+            throw new Error('Auteur non trouvé');
+        }
+        return author;
+    }
 }
