@@ -76,10 +76,10 @@ export class AuthorService {
         return this.authorRepository.save(author);
     }
 
-    // méthode pour obtenir les détails d'un auteur par ID
     async findOne(id: string): Promise<Author | null> {
         return this.authorRepository.findOne({
             where: { id },
         });
     }
+    
 }

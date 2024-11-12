@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation'; 
 import axios from 'axios';
 import '../../App.css';
-import DeleteAuthorButton from '../../../components/DeleteAuthorButton';
+//import DeleteAuthorButton from '../../../components/DeleteAuthorButton';
 import { CircularProgress, Button, Modal, Box } from '@mui/material';
 
 interface Author {
