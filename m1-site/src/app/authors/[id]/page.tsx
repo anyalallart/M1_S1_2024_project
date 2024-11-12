@@ -1,26 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/router';
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation'; 
 import axios from 'axios';
-import { Button, Modal, TextField, Typography, Box, Avatar } from '@mui/material';
 import '../../App.css';
+import DeleteAuthorButton from '../../../components/DeleteAuthorButton';
+import { CircularProgress, Button, Modal, Box } from '@mui/material';
+
+interface Author {
+    id: number;
+    name: string;
+    photo: string;
+    biography: string;
+    books: Book[];
+}
+
+interface Book {
+    id: number;
+    title: string;
+}
 
 const AuthorDetailPage = () => {
   const { id } = useParams();
   const router = useRouter();
-  const [author, setAuthor] = useState(null);
+  const [author, setAuthor] = useState<Author | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [editMode, setEditMode] = useState(false);
-  const [newBook, setNewBook] = useState({ title: '', publicationDate: '' });
-  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (id) {
-      fetchAuthorDetails(id);
+      fetchAuthorDetails(id as string);
     }
   }, [id]);
 
-  const fetchAuthorDetails = async (authorId) => {
+  const fetchAuthorDetails = async (authorId: string) => {
     try {
       setLoading(true);
       const response = await axios.get(`http://localhost:3001/api/authors/${authorId}`);
@@ -39,122 +53,47 @@ const AuthorDetailPage = () => {
     } catch (error) {
       setError("Erreur lors de la suppression de l'auteur.");
     }
-  };
+  }
 
-  const handleEdit = async () => {
-    try {
-      await axios.put(`http://localhost:3001/api/authors/${id}`, author);
-      setEditMode(false);
-      fetchAuthorDetails(id);
-    } catch (error) {
-      setError("Erreur lors de la modification de l'auteur.");
-    }
-  };
-
-  const handleAddBook = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post('http://localhost:3001/api/books', { ...newBook, authorId: id });
-      fetchAuthorDetails(id);
-    } catch (error) {
-      setError("Erreur lors de l'ajout du livre.");
-    }
-  };
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-32">
+        <CircularProgress color="inherit" />
+      </div>
+    );
   }
 
-  if (error) {
-    return <div>{error}</div>;
-  }
+  if (error) return <div>{error}</div>;
 
   return (
-    <div className="container mx-auto p-4">
-      {editMode ? (
-        <form onSubmit={handleEdit} className="space-y-4">
-          <TextField
-            label="Nom"
-            value={author.name}
-            onChange={(e) => setAuthor({ ...author, name: e.target.value })}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Biographie"
-            value={author.biography}
-            onChange={(e) => setAuthor({ ...author, biography: e.target.value })}
-            fullWidth
-            multiline
-            rows={4}
-            margin="normal"
-          />
-          <Button type="submit" variant="contained" color="primary">
-            Enregistrer
-          </Button>
-        </form>
-      ) : (
-        <div className="space-y-4">
-          <Typography variant="h4" className="text-3xl font-bold">
-            {author.name}
-          </Typography>
-          <Avatar src={author.photo} alt={author.name} className="w-32 h-32" />
-          <Typography variant="body1" className="text-lg">
-            {author.biography}
-          </Typography>
-          <Button variant="contained" color="primary" onClick={() => setEditMode(true)}>
-            Modifier
-          </Button>
+    <div className="w-full bg-bgLight dark:bg-text text-text dark:text-bgLight rounded-lg shadow-xl p-8 max-w-4xl mx-auto">
+      <div className="flex items-center space-x-8">
+        <img src={author?.photo} alt={author?.name} className="w-48 h-64 object-cover rounded-lg" />
+        <div className="flex flex-col space-y-4">
+          <h1 className="text-3xl font-bold text-center md:text-left">{author?.name}</h1>
+          <p className="text-lg text-center md:text-left">Biographie: {author?.biography}</p>
+          <h2 className="text-2xl font-bold text-center md:text-left mt-4">Livres:</h2>
+          <ul>
+            {author?.books.map(book => (
+              <li key={book.id}>
+                <a href={`/books/${book.id}`} className="text-blue-500 hover:underline">{book.title}</a>
+              </li>
+            ))}
+          </ul>
+          <Button variant="contained" color="secondary" onClick={handleOpen}>Supprimer l'auteur</Button>
+          <Modal open={open} onClose={handleClose}>
+            <Box className="p-4 bg-white rounded-lg shadow-lg">
+              <h2>Confirmer la suppression</h2>
+              <p>Êtes-vous sûr de vouloir supprimer cet auteur ?</p>
+              <Button variant="contained" color="secondary" onClick={handleDelete}>Confirmer</Button>
+              <Button variant="contained" onClick={handleClose}>Annuler</Button>
+            </Box>
+          </Modal>
         </div>
-      )}
-      <Typography variant="h5" className="text-2xl font-bold mt-6">
-        Livres:
-      </Typography>
-      <ul className="list-disc pl-5">
-        {author.books.map((book) => (
-          <li key={book.id} className="text-lg">
-            <a href={`/books/${book.id}`} className="text-blue-500 hover:underline">
-              {book.title}
-            </a>
-          </li>
-        ))}
-      </ul>
-      <form onSubmit={handleAddBook} className="space-y-4 mt-6">
-        <TextField
-          label="Titre du livre"
-          value={newBook.title}
-          onChange={(e) => setNewBook({ ...newBook, title: e.target.value })}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Date de publication"
-          type="date"
-          value={newBook.publicationDate}
-          onChange={(e) => setNewBook({ ...newBook, publicationDate: e.target.value })}
-          fullWidth
-          margin="normal"
-          InputLabelProps={{ shrink: true }}
-        />
-        <Button type="submit" variant="contained" color="primary">
-          Ajouter un livre
-        </Button>
-      </form>
-      <Button variant="contained" color="secondary" onClick={() => setOpenDeleteModal(true)} className="mt-6">
-        Supprimer l'auteur
-      </Button>
-      <Modal open={openDeleteModal} onClose={() => setOpenDeleteModal(false)}>
-        <Box className="p-4 bg-white mx-auto mt-20 w-80 text-center">
-          <Typography variant="h6">Confirmer la suppression</Typography>
-          <Typography variant="body1">Êtes-vous sûr de vouloir supprimer cet auteur ?</Typography>
-          <Button variant="contained" color="secondary" onClick={handleDelete} className="mt-4">
-            Supprimer
-          </Button>
-          <Button variant="contained" onClick={() => setOpenDeleteModal(false)} className="mt-4">
-            Annuler
-          </Button>
-        </Box>
-      </Modal>
+      </div>
     </div>
   );
 };
